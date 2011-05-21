@@ -77,7 +77,6 @@ Game = {
            Object.extend &&
            Function.bind &&
            document.addEventListener && // HTML5 standard, all modern browsers that support canvas should also support add/removeEventListener
-           window.innerWidth && // for fullscreen mode
            Game.ua.hasCanvas
   },
 
@@ -117,8 +116,8 @@ Game = {
   addEvent:    function(obj, type, fn) { obj.addEventListener(type, fn, false);    },
   removeEvent: function(obj, type, fn) { obj.removeEventListener(type, fn, false); },
 
-  windowWidth:  function() { return window.innerWidth;  },
-  windowHeight: function() { return window.innerHeight; },
+  windowWidth:  function() { return window.innerWidth  || /* ie */ document.documentElement.offsetWidth;  },
+  windowHeight: function() { return window.innerHeight || /* ie */ document.documentElement.offsetHeight; },
 
   ready: function(fn) {
     if (Game.compatible())
