@@ -77,6 +77,7 @@ Game = {
            Object.extend &&
            Function.bind &&
            document.addEventListener && // HTML5 standard, all modern browsers that support canvas should also support add/removeEventListener
+           window.innerWidth && // for fullscreen mode
            Game.ua.hasCanvas
   },
 
@@ -115,6 +116,9 @@ Game = {
 
   addEvent:    function(obj, type, fn) { obj.addEventListener(type, fn, false);    },
   removeEvent: function(obj, type, fn) { obj.removeEventListener(type, fn, false); },
+
+  windowWidth:  function() { return window.innerWidth;  },
+  windowHeight: function() { return window.innerHeight; },
 
   ready: function(fn) {
     if (Game.compatible())
@@ -195,8 +199,8 @@ Game = {
       this.fps          = this.cfg.fps || 60;
       this.interval     = 1000.0 / this.fps;
       this.canvas       = document.getElementById(id);
-      this.width        = this.cfg.width  || this.canvas.offsetWidth;
-      this.height       = this.cfg.height || this.canvas.offsetHeight;
+      this.width        = this.cfg.fullscreen ? Game.windowWidth()  : (this.cfg.width  || this.canvas.offsetWidth);
+      this.height       = this.cfg.fullscreen ? Game.windowHeight() : (this.cfg.height || this.canvas.offsetHeight);
       this.front        = this.canvas;
       this.front.width  = this.width;
       this.front.height = this.height;
@@ -275,6 +279,18 @@ Game = {
     addEvents: function() {
       Game.addEvent(document, 'keydown', this.onkeydown.bind(this));
       Game.addEvent(document, 'keyup',   this.onkeyup.bind(this));
+      Game.addEvent(window,   'resize',  this.resize.bind(this));
+    },
+
+    resize: function() {
+      if (this.cfg.fullscreen) {
+        this.width  = this.front.width  = this.back.width  = Game.windowWidth();
+        this.height = this.front.height = this.back.height = Game.windowHeight();
+        this.front.style.width  = this.back.style.width  = this.width  + "px";
+        this.front.style.height = this.back.style.height = this.height + "px";
+        if (this.game.onresize)
+          this.game.onresize(this.width, this.height);
+      }
     },
 
     onkeydown: function(ev) { if (this.game.onkeydown) this.game.onkeydown(ev.keyCode); },

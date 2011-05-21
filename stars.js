@@ -5,8 +5,7 @@
 Stars = {
 
   Defaults: {
-    width:  640,   // logical canvas width (browser will scale to physical canvas size)
-    height: 480,   // logical canvas height (ditto)
+    fullscreen: true,
     stats:  true,
     stars:  500,
     layers: [
@@ -87,7 +86,13 @@ Stars = {
       if (n <= this.layers[i].max)
         return this.layers[i];
     }
-  }
+  },
+
+  onresize: function(width, height) {
+    this.width = width;
+    this.height = height;
+    this.stars = this.initializeStars(this.cfg.stars);
+  },
 
   //=============================================================================
 

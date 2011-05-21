@@ -11,7 +11,6 @@ TODO
  * more detailed levels
  * more color range
  * streaking
- * auto size canvas to viewport
  * faster rendering
  * interaction
    - speed up, slow down
