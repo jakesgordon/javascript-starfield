@@ -82,7 +82,7 @@ Game = {
 
   start: function(id, game, cfg) {
     if (Game.compatible())
-      return Object.construct(Game.Runner, id, game, cfg).game; // return the game instance, not the runner (caller can always get at the runner via game.runner)
+      return Game.current = Object.construct(Game.Runner, id, game, cfg).game; // return the game instance, not the runner (caller can always get at the runner via game.runner)
   },
 
   ua: function() { // should avoid user agent sniffing... but sometimes you just gotta do what you gotta do
@@ -233,11 +233,14 @@ Game = {
     },
 
     draw: function() {
-      this.back2d.clearRect(0, 0, this.width, this.height);
-      this.game.draw(this.back2d);
-      this.drawStats(this.back2d);
+//      this.back2d.clearRect(0, 0, this.width, this.height);
+//      this.game.draw(this.back2d);
+//      this.drawStats(this.back2d);
+//      this.front2d.clearRect(0, 0, this.width, this.height);
+//      this.front2d.drawImage(this.back, 0, 0);
       this.front2d.clearRect(0, 0, this.width, this.height);
-      this.front2d.drawImage(this.back, 0, 0);
+      this.game.draw(this.front2d);
+      this.drawStats(this.front2d);
     },
 
     resetStats: function() {

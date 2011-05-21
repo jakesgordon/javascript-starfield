@@ -1,3 +1,3 @@
 body         { background-color: black; color: #AAA; font-size: 12pt; padding: 0; margin: 0; }
 #unsupported { border: 1px solid yellow; color: black; background-color: #FFFFAD; padding: 2em; margin: 1em; display: inline-block; }
-#stars       { width: 100%; height: 100%; padding: 0; margin: 0; border: 0; }
+#stars       { display: block; margin: auto; }
