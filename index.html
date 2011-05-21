@@ -1,0 +1,26 @@
+<!DOCTYPE html> 
+<html>
+<head>
+  <title>My god, its full of stars!</title> 
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+  <link href="stars.css" media="screen, print" rel="stylesheet" type="text/css" /> 
+</head> 
+ 
+<body> 
+
+  <canvas id="stars">
+    <div id="unsupported">
+      Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
+    </div>
+  </canvas>
+
+  <script src="game.js" type="text/javascript"></script> 
+  <script src="stars.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  Game.ready(function() {
+    Game.start('stars', Stars);
+  });
+  </script>
+
+</body> 
+</html>
