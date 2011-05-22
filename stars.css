@@ -2,11 +2,11 @@ body         { background-color: black; color: #AAA; font-size: 12pt; padding: 0
 #unsupported { border: 1px solid yellow; color: black; background-color: #FFFFAD; padding: 2em; margin: 1em; display: inline-block; }
 #stars       { display: block; margin: auto; }
 
-#controls        { position: absolute; display: inline-block; width: 90px; height: 90px; }
-#controls img    { cursor: pointer; }
-#controls #up    { position: absolute; left: 30px; top:  0px; }
-#controls #down  { position: absolute; left: 30px; top: 60px; }
-#controls #left  { position: absolute; left:  0px; top: 30px; }
-#controls #right { position: absolute; left: 60px; top: 30px; }
-
+#controls            { position: absolute; display: inline-block; width: 90px; height: 90px; }
+#controls img        { cursor: pointer; }
+#controls img:active { margin-top: 2px; margin-left: 2px; opacity: 0.5; }
+#controls #up        { position: absolute; left: 30px; top:  0px; }
+#controls #down      { position: absolute; left: 30px; top: 60px; }
+#controls #left      { position: absolute; left:  0px; top: 30px; }
+#controls #right     { position: absolute; left: 60px; top: 30px; }
 
