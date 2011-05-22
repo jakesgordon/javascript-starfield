@@ -8,9 +8,6 @@ This is a small experiment to implement a starfield in an HTML <canvas>.
 
 TODO
 ====
- * more detailed levels
- * more color range
- * streaking
  * faster rendering
  * interaction
    - speed up, slow down
