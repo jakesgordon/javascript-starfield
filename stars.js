@@ -29,7 +29,7 @@ Stars = {
     this.height = runner.height;
     this.initLayers(cfg.layers);
     this.initStars();
-    this.changeDirection(cfg.dir);
+    this.changeDirection(cfg.dir, true);
     this.runner.start();
   },
 
@@ -108,22 +108,25 @@ Stars = {
     }
   },
 
-  changeDirection: function(dir) {
-    this.cfg.left  = (dir == 'left');
-    this.cfg.right = (dir == 'right');
-    this.cfg.up    = (dir == 'up');
-    this.cfg.down  = (dir == 'down');
-    this.positionStars();
+  changeDirection: function(dir, force) {
+    if (force || (this.cfg.dir != dir)) {
+      this.cfg.dir   = dir;
+      this.cfg.left  = (dir == 'left');
+      this.cfg.right = (dir == 'right');
+      this.cfg.up    = (dir == 'up');
+      this.cfg.down  = (dir == 'down');
+      this.positionStars();
+    }
   },
 
   onkeydown: function(keyCode) {
-    if ((keyCode == Game.KEY.DOWN) && !this.cfg.down)
+    if (keyCode == Game.KEY.DOWN)
       this.changeDirection('down');
-    else if ((keyCode == Game.KEY.UP) && !this.cfg.up)
+    else if (keyCode == Game.KEY.UP)
       this.changeDirection('up');
-    else if ((keyCode == Game.KEY.RIGHT) && !this.cfg.right)
+    else if (keyCode == Game.KEY.RIGHT)
       this.changeDirection('right');
-    else if ((keyCode == Game.KEY.LEFT) && !this.cfg.left)
+    else if (keyCode == Game.KEY.LEFT)
       this.changeDirection('left');
   },
 

@@ -12,6 +12,6 @@ TODO
  * keyboard interaction
    - speed up, slow down
    - more/less stars
- * icons for interaction
+ * css animation/transition on button press ?
  * 3d mode
  * background nasa nebula picture ?
