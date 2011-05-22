@@ -11,9 +11,9 @@ Stars = {
     dy:          0,
     maxspeed:   10,
     layers: [
-      { percent:  30, size: { min: 0.4, max: 1.0 }, speed: { min:   1, max:   2 }, colors: ['#111', '#111', '#511'] }, // 1 in 3 get a tint of red
-      { percent:  25, size: { min: 0.6, max: 1.2 }, speed: { min:   2, max:   4 }, colors: ['#333', '#333', '#533'] }, // 1 in 3 get a tint of red
-      { percent:  15, size: { min: 0.8, max: 1.4 }, speed: { min:   4, max:   8 }, colors: ['#555', '#555', '#555'] }, // 1 in 3 get a tint of red
+      { percent:  30, size: { min: 0.4, max: 1.0 }, speed: { min:   1, max:   2 }, colors: ['#111', '#111', '#811'] }, // 1 in 3 get a tint of red
+      { percent:  25, size: { min: 0.6, max: 1.2 }, speed: { min:   2, max:   4 }, colors: ['#333', '#333', '#833'] }, // 1 in 3 get a tint of red
+      { percent:  15, size: { min: 0.8, max: 1.4 }, speed: { min:   4, max:   8 }, colors: ['#555', '#555', '#855'] }, // 1 in 3 get a tint of red
       { percent:  15, size: { min: 1.0, max: 1.6 }, speed: { min:   8, max:  16 }, colors: ['#777'] },
       { percent:   8, size: { min: 1.2, max: 1.8 }, speed: { min:  16, max:  32 }, colors: ['#999'] },
       { percent:   4, size: { min: 1.4, max: 2.0 }, speed: { min:  32, max:  64 }, colors: ['#BBB'] },
@@ -78,33 +78,25 @@ Stars = {
       layer = this.randomLayer();
       this.stars.push({
         layer: layer,
-        color: layer.colors[Math.round(Game.random(0, layer.colors.length-1))],
+        color: Game.randomChoice(layer.colors),
         speed: Game.random(layer.speed.min, layer.speed.max),
-        size:  Game.random(layer.size.min, layer.size.max),
+        size:  Game.random(layer.size.min,  layer.size.max),
         x:     Game.random(0, this.width),
         y:     Game.random(0, this.height)
       });
     }
   },
 
-  repositionStar: function(star) { // TODO: simplify this
-    if (this.cfg.dx == 0) {
-      star.x = Game.random(0, this.width);
-      star.y = (this.cfg.dy > 0) ? 0 : this.height;
-    }
-    else if (this.cfg.dy == 0) {
+  repositionStar: function(star) {
+    var horizontal = (this.cfg.dy == 0);
+    var vertical   = (this.cfg.dx == 0);
+    if (horizontal || (!horizontal && !vertical && Game.randomBool())) {
       star.x = (this.cfg.dx > 0) ? 0 : this.width;
       star.y = Game.random(0, this.height);
     }
     else {
-      if (Game.randomChoice(true, false)) {
-        star.x = (this.cfg.dx > 0) ? 0 : this.width;
-        star.y = Game.random(0, this.height);
-      }
-      else {
-        star.x = Game.random(0, this.width);
-        star.y = (this.cfg.dy > 0) ? 0 : this.height;
-      }
+      star.x = Game.random(0, this.width);
+      star.y = (this.cfg.dy > 0) ? 0 : this.height;
     }
   },
 

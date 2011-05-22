@@ -159,8 +159,12 @@ Game = {
     return (min + (Math.random() * (max - min)));
   },
 
-  randomChoice: function() {
-    return arguments[Math.round(Game.random(0, arguments.length-1))];
+  randomChoice: function(choices) {
+    return choices[Math.round(Game.random(0, choices.length-1))];
+  },
+
+  randomBool: function() {
+    return Game.randomChoice([true, false]);
   },
 
   timestamp: function() { 
