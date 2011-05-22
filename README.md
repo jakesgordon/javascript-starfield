@@ -9,4 +9,3 @@ This is a small experiment to implement a starfield in an HTML <canvas>.
 TODO
 ====
  * 3d mode
- * background nasa nebula picture ?

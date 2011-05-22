@@ -277,10 +277,10 @@ Game = {
     drawStats: function(ctx) {
       if (this.cfg.stats) {
         ctx.fillStyle = 'white';
-        ctx.fillText("frame: "  + this.stats.count,         this.width - 100, this.height - 60);
-        ctx.fillText("fps: "    + this.stats.fps,           this.width - 100, this.height - 50);
-        ctx.fillText("update: " + this.stats.update + "ms", this.width - 100, this.height - 40);
-        ctx.fillText("draw: "   + this.stats.draw   + "ms", this.width - 100, this.height - 30);
+        ctx.fillText("frame: "  + Math.round(this.stats.count),         this.width - 100, this.height - 60);
+        ctx.fillText("fps: "    + Math.round(this.stats.fps),           this.width - 100, this.height - 50);
+        ctx.fillText("update: " + Math.round(this.stats.update) + "ms", this.width - 100, this.height - 40);
+        ctx.fillText("draw: "   + Math.round(this.stats.draw)   + "ms", this.width - 100, this.height - 30);
       }
     },
 
