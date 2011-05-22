@@ -7,16 +7,17 @@ Stars = {
   Defaults: {
     fullscreen: true,
     stats:      true,
-    dir:       'right',
+    dx:         1,
+    dy:         0,
     layers: [
-      { percent:  30, size: { min: 0.4, max: 1.0 }, speed: { min:    8, max:   16 }, colors: ['#111', '#111', '#511'] }, // 1 in 3 get a tint of red
-      { percent:  25, size: { min: 0.6, max: 1.2 }, speed: { min:   16, max:   32 }, colors: ['#333', '#333', '#533'] }, // 1 in 3 get a tint of red
-      { percent:  15, size: { min: 0.8, max: 1.4 }, speed: { min:   32, max:   64 }, colors: ['#555', '#555', '#555'] }, // 1 in 3 get a tint of red
-      { percent:  15, size: { min: 1.0, max: 1.6 }, speed: { min:   64, max:  128 }, colors: ['#777'] },
-      { percent:   8, size: { min: 1.2, max: 1.8 }, speed: { min:  128, max:  256 }, colors: ['#999'] },
-      { percent:   4, size: { min: 1.4, max: 2.0 }, speed: { min:  256, max:  512 }, colors: ['#BBB'] },
-      { percent:   2, size: { min: 1.6, max: 2.2 }, speed: { min:  512, max: 1024 }, colors: ['#DDD'] },
-      { percent:   1, size: { min: 1.8, max: 2.4 }, speed: { min: 1024, max: 2048 }, colors: ['#FFF'] }
+      { percent:  30, size: { min: 0.4, max: 1.0 }, speed: { min:   1, max:   2 }, colors: ['#111', '#111', '#511'] }, // 1 in 3 get a tint of red
+      { percent:  25, size: { min: 0.6, max: 1.2 }, speed: { min:   2, max:   4 }, colors: ['#333', '#333', '#533'] }, // 1 in 3 get a tint of red
+      { percent:  15, size: { min: 0.8, max: 1.4 }, speed: { min:   4, max:   8 }, colors: ['#555', '#555', '#555'] }, // 1 in 3 get a tint of red
+      { percent:  15, size: { min: 1.0, max: 1.6 }, speed: { min:   8, max:  16 }, colors: ['#777'] },
+      { percent:   8, size: { min: 1.2, max: 1.8 }, speed: { min:  16, max:  32 }, colors: ['#999'] },
+      { percent:   4, size: { min: 1.4, max: 2.0 }, speed: { min:  32, max:  64 }, colors: ['#BBB'] },
+      { percent:   2, size: { min: 1.6, max: 2.2 }, speed: { min:  64, max: 128 }, colors: ['#DDD'] },
+      { percent:   1, size: { min: 1.8, max: 2.4 }, speed: { min: 128, max: 256 }, colors: ['#FFF'] }
     ]
   },
 
@@ -29,7 +30,6 @@ Stars = {
     this.height = runner.height;
     this.initLayers(cfg.layers);
     this.initStars();
-    this.changeDirection(cfg.dir, true);
     this.runner.start();
   },
 
@@ -37,10 +37,10 @@ Stars = {
     var star, n, max = this.stars.length;
     for(n = 0 ; n < max ; n++) {
       star = this.stars[n];
-      star.x = star.x + (star.dx != 0 ? (star.dx * dt) : 0);
-      star.y = star.y + (star.dy != 0 ? (star.dy * dt) : 0);
+      star.x = star.x + (this.cfg.dx * star.speed * dt);
+      star.y = star.y + (this.cfg.dy * star.speed * dt);
       if ((star.x < 0) || (star.y < 0) || (star.x > this.width) || (star.y > this.height))
-        this.positionStar(star);
+        this.repositionStar(star);
     }
   },
 
@@ -50,7 +50,7 @@ Stars = {
       star = this.stars[n];
       ctx.fillStyle = star.color;
       ctx.beginPath();
-      ctx.arc(star.x, star.y, star.size, 0, 2*Math.PI);
+      ctx.arc(star.x, star.y, star.size, 0, 2*Math.PI, true);
       ctx.fill();
       ctx.closePath();
     }
@@ -74,29 +74,33 @@ Stars = {
       layer = this.randomLayer();
       this.stars.push({
         layer: layer,
-        color: layer.colors[Math.round(Game.random(0, layer.colors.length))],
-        size:  Game.random(layer.size.min, layer.size.max)
+        color: layer.colors[Math.round(Game.random(0, layer.colors.length-1))],
+        speed: Game.random(layer.speed.min, layer.speed.max),
+        size:  Game.random(layer.size.min, layer.size.max),
+        x:     Game.random(0, this.width),
+        y:     Game.random(0, this.height)
       });
     }
   },
 
-  positionStars: function() {
-    var n, count = this.stars.length;
-    for(n = 0 ; n < count ; n++)
-      this.positionStar(this.stars[n], true);
-  },
-
-  positionStar: function(star, random) {
-    if (this.cfg.left || this.cfg.right) {
-      star.x  = random ? Game.random(0, this.width) : (this.cfg.left ? 0 : this.width);
-      star.y  = Game.random(0, this.height);
-      star.dx = Game.random(star.layer.speed.min, star.layer.speed.max) * (this.cfg.left ? 1 : -1);
-      star.dy = 0;
-    } else {
-      star.x  = Game.random(0, this.width);
-      star.y  = random ? Game.random(0, this.height) : (this.cfg.up ? 0 : this.height);
-      star.dx = 0;
-      star.dy = Game.random(star.layer.speed.min, star.layer.speed.max) * (this.cfg.up ? 1 : -1);
+  repositionStar: function(star) { // TODO: simplify this
+    if (this.cfg.dx == 0) {
+      star.x = Game.random(0, this.width);
+      star.y = (this.cfg.dy > 0) ? 0 : this.height;
+    }
+    else if (this.cfg.dy == 0) {
+      star.x = (this.cfg.dx > 0) ? 0 : this.width;
+      star.y = Game.random(0, this.height);
+    }
+    else {
+      if (Game.randomChoice(true, false)) {
+        star.x = (this.cfg.dx > 0) ? 0 : this.width;
+        star.y = Game.random(0, this.height);
+      }
+      else {
+        star.x = Game.random(0, this.width);
+        star.y = (this.cfg.dy > 0) ? 0 : this.height;
+      }
     }
   },
 
@@ -108,15 +112,15 @@ Stars = {
     }
   },
 
-  changeDirection: function(dir, force) {
-    if (force || (this.cfg.dir != dir)) {
-      this.cfg.dir   = dir;
-      this.cfg.left  = (dir == 'left');
-      this.cfg.right = (dir == 'right');
-      this.cfg.up    = (dir == 'up');
-      this.cfg.down  = (dir == 'down');
-      this.positionStars();
-    }
+  changeDirection: function(dir) {
+    if (dir == 'left')
+      this.cfg.dx += 1;
+    else if (dir == 'right')
+      this.cfg.dx -= 1;
+    else if (dir == 'up')
+      this.cfg.dy += 1;
+    else if (dir == 'down')
+      this.cfg.dy -= 1;
   },
 
   onkeydown: function(keyCode) {
@@ -134,7 +138,6 @@ Stars = {
     this.width  = width;
     this.height = height;
     this.initStars();
-    this.positionStars();
   },
 
   //=============================================================================
