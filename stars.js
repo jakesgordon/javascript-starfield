@@ -7,8 +7,9 @@ Stars = {
   Defaults: {
     fullscreen: true,
     stats:      true,
-    dx:         1,
-    dy:         0,
+    dx:         -2,
+    dy:          0,
+    maxspeed:   10,
     layers: [
       { percent:  30, size: { min: 0.4, max: 1.0 }, speed: { min:   1, max:   2 }, colors: ['#111', '#111', '#511'] }, // 1 in 3 get a tint of red
       { percent:  25, size: { min: 0.6, max: 1.2 }, speed: { min:   2, max:   4 }, colors: ['#333', '#333', '#533'] }, // 1 in 3 get a tint of red
@@ -54,6 +55,9 @@ Stars = {
       ctx.fill();
       ctx.closePath();
     }
+    ctx.fillStyle = 'white';
+    ctx.fillText("dx: " + this.cfg.dx, 30, 40);
+    ctx.fillText("dy: " + this.cfg.dy, 30, 50);
   },
 
   initLayers: function(layers) {
@@ -113,14 +117,14 @@ Stars = {
   },
 
   changeDirection: function(dir) {
-    if (dir == 'left')
-      this.cfg.dx += 1;
-    else if (dir == 'right')
-      this.cfg.dx -= 1;
-    else if (dir == 'up')
-      this.cfg.dy += 1;
-    else if (dir == 'down')
-      this.cfg.dy -= 1;
+    if ((dir == 'left') && (this.cfg.dx < this.cfg.maxspeed))
+      this.cfg.dx = (this.cfg.dx == -1) && (this.cfg.dy == 0) ?  1 : this.cfg.dx + 1;
+    else if ((dir == 'right') && (this.cfg.dx > -this.cfg.maxspeed))
+      this.cfg.dx = (this.cfg.dx ==  1) && (this.cfg.dy == 0) ? -1 : this.cfg.dx - 1;
+    else if ((dir == 'up') && (this.cfg.dy < this.cfg.maxspeed))
+      this.cfg.dy = (this.cfg.dy == -1) && (this.cfg.dx == 0) ?  1 : this.cfg.dy + 1;
+    else if ((dir == 'down') && (this.cfg.dy > -this.cfg.maxspeed))
+      this.cfg.dy = (this.cfg.dy ==  1) && (this.cfg.dx == 0) ? -1 : this.cfg.dy - 1;
   },
 
   onkeydown: function(keyCode) {
