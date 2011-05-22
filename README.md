@@ -9,9 +9,9 @@ This is a small experiment to implement a starfield in an HTML <canvas>.
 TODO
 ====
  * faster rendering
- * interaction
+ * keyboard interaction
    - speed up, slow down
-   - change direction
    - more/less stars
+ * icons for interaction
  * 3d mode
  * background nasa nebula picture ?
